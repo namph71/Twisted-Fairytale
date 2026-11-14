@@ -7,6 +7,7 @@ public class PuzzleShow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI PuzzleText;
     [SerializeField] private PuzzleObserver Observer;
     [SerializeField] private string Description;
+    [SerializeField] private GameObject Blockers;
     void Start()
     {
         
@@ -28,6 +29,7 @@ public class PuzzleShow : MonoBehaviour
     private void OnPuzzleCompleted()
     {
         gameObject.SetActive(false);
+        Blockers.gameObject.SetActive(false);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

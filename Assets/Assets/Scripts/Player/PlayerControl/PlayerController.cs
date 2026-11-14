@@ -32,13 +32,14 @@ public class PlayerController : MonoBehaviour, IRespawnable
     public PlayerAttackData ultimateAttack;
     public float attackReach = 0.35f;
     public LayerMask attackHitMask;
-    [Header("Parry (F)")]
-    [Tooltip("Khoảng đỡ được đòn tính từ đầu parry")]
-    public float parryWindow = 0.2f;
-    [Tooltip("Tổng thời gian parry nếu đỡ trượt (gồm cả hồi chiêu)")]
-    public float parryDuration = 0.45f;
-    [Tooltip("Thời gian khựng lại sau khi đỡ thành công, trước khi điều khiển lại")]
-    public float parrySuccessRecovery = 0.1f;
+    [Header("Block (F)")]
+    public float blockDuration = 1f;
+    public float blockStartCost = 10f;
+    public float blockHitCost = 5f;
+    [Tooltip("Object con (đang tắt) có Collider2D, layer nằm trong stopMask của đạn enemy")]
+    public GameObject blockShield;
+    [Tooltip("VFX hiện quanh player khi đỡ trúng")]
+    public GameObject blockHitVFX;
     // Die
     [Header("Die")]
     public float deathSequenceTime = 1.5f;
@@ -60,6 +61,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
 
     public PlayerMovement Movement { get; private set; }
     public PlayerAttack Attack { get; private set; }
+    public PlayerWeapon Weapon { get; private set; }
     public Rigidbody2D Rb => Movement.Rb;
     public PlayerInputReader Input { get; private set; }
     public Animator Animator => animator;
@@ -73,7 +75,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
     public PlayerAttackState AttackState { get; private set; }
     public PlayerDashState DashState { get; private set; }
     public PlayerDodgeState DodgeState { get; private set; }
-    public PlayerParryState ParryState { get; private set; }
+    public PlayerBlockState BlockState { get; private set; }
     public PlayerDieState DieState { get; private set; }
     public PlayerReviveState ReviveState { get; private set; }
 
@@ -101,6 +103,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
     {
         Movement = GetComponent<PlayerMovement>();
         Attack = GetComponent<PlayerAttack>();
+        Weapon = GetComponent<PlayerWeapon>();
         Input = GetComponent<PlayerInputReader>();
         if (animator == null) animator = GetComponentInChildren<Animator>();
         cam = Camera.main;
@@ -112,7 +115,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
         AttackState = new PlayerAttackState(this, Machine);
         DashState = new PlayerDashState(this, Machine);
         DodgeState = new PlayerDodgeState(this, Machine);
-        ParryState = new PlayerParryState(this, Machine);
+        BlockState = new PlayerBlockState(this, Machine);
         DieState = new PlayerDieState(this, Machine);
         ReviveState = new PlayerReviveState(this, Machine);
         PlayerHP = GetComponent<PlayerHP>();
@@ -141,7 +144,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
     {
         if (cam == null) return;
         Vector3 newPosition = transform.position;
-        newPosition.z = -10f; // Ép camera lùi lại Z = -10 để nhìn thấy nhân vật
+        newPosition.z = -100f;
         cam.transform.position = newPosition;
     }
 
@@ -228,7 +231,8 @@ public class PlayerController : MonoBehaviour, IRespawnable
         Movement.Teleport(position);
         Movement.ResetFacing();
         Machine.ChangeState(ReviveState);
-        PlayerHP.RegainHP(PlayerHP.GetMaxHP());
+        PlayerHP.RegainHP(PlayerHP.GetMaxHP);
+        PlayerStamina.RegainStamina(PlayerStamina.GetMaxStamina);
         IsInvulnerable = true;
     }
 

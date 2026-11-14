@@ -26,6 +26,7 @@ public class PlayerStamina : MonoBehaviour
     {
 
     }
+    public float GetMaxStamina => MaxStamina;
     public bool IsTired (float amount)
     {
         if (Time.time - lastUseTime < regenDelay) return true;

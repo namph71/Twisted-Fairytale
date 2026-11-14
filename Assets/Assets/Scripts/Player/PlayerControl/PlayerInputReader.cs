@@ -16,7 +16,7 @@ public class PlayerInputReader : MonoBehaviour
     private PlayerWeapon playerWeapon;
     public Vector2 Move { get; private set; }
 
-    private float attackTime = -1f, heavyAttackTime = -1f, evadeTime = -1f, dashTime = -1f, dodgeTime = -1f, parryTime = -1f;
+    private float attackTime = -1f, heavyAttackTime = -1f, evadeTime = -1f, dashTime = -1f, dodgeTime = -1f, blockTime = -1f;
 
     [Header("Chuột trái: bấm = đòn thường, giữ = heavy")]
     [Tooltip("Thả tay trước mốc này = đòn thường")]
@@ -29,6 +29,7 @@ public class PlayerInputReader : MonoBehaviour
     private float lmbPressTime = -1f; // -1 = không đang giữ
     /// <summary>Đã giữ quá mốc bấm nhanh, đang tích lực heavy.</summary>
     public bool IsChargingHeavy => lmbPressTime >= 0f && Time.time - lmbPressTime >= tapMaxTime;
+    public bool BlockHeld { get; private set; } // F đang được giữ
     private void Awake()
     {
         player = GetComponent<PlayerController>();
@@ -58,7 +59,8 @@ public class PlayerInputReader : MonoBehaviour
             }
             playerWeapon.PerformAttack?.Invoke(player.dashDuration, AttackType.Dash);
         }
-        if (kb.fKey.wasPressedThisFrame) parryTime = Time.time;
+        if (kb.fKey.wasPressedThisFrame) blockTime = Time.time; // giữ nguyên: lúc bấm xuống để vào Block
+        BlockHeld = kb.fKey.isPressed;                          // mới: giữ F thì còn block
         if (mouse != null) ReadAttackButton(mouse.leftButton);
         // Change Weapon
         if (kb.digit1Key.wasPressedThisFrame) playerWeapon.DoChangeWeapon(0);
@@ -110,7 +112,7 @@ public class PlayerInputReader : MonoBehaviour
     public bool ConsumeDash() => Consume(ref dashTime);
     public bool ConsumeDodge() => Consume(ref dodgeTime);
     public bool ConsumeEvade() => Consume(ref evadeTime);
-    public bool ConsumeParry() => Consume(ref parryTime);
+    public bool ConsumeBlock() => Consume(ref blockTime);
 
     private bool Consume(ref float pressedTime)
     {

@@ -2,7 +2,7 @@
 
 /// <summary>
 /// Super-state cho mọi trạng thái "tự do điều khiển" (Idle/Walk/Run).
-/// Chỗ DUY NHẤT xử lý chuyển sang action (attack/dash/parry) -> thêm state mới chỉ sửa ở đây.
+/// Chỗ DUY NHẤT xử lý chuyển sang action (attack/dash/block)
 /// </summary>
 public abstract class PlayerGroundedState : PlayerState
 {
@@ -15,7 +15,7 @@ public abstract class PlayerGroundedState : PlayerState
         // 1. Action có độ ưu tiên cao hơn locomotion (bật dần khi có state):
         if (player.Input.ConsumeDash())   { machine.ChangeState(player.DashState);   return; }
         if (player.Input.ConsumeDodge())   { machine.ChangeState(player.DodgeState);   return; }
-        if (player.Input.ConsumeParry())  { machine.ChangeState(player.ParryState);  return; }
+        if (player.Input.ConsumeBlock())  { machine.ChangeState(player.BlockState);  return; }
         if (player.TryAttack()) { return; }
 
         // 2. Locomotion: Idle <-> Walk <-> Run

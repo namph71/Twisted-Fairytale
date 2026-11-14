@@ -3,15 +3,19 @@ using UnityEngine;
 
 public class PuzzleObject : MonoBehaviour
 {
-    [SerializeField] private string Keyword;
+    [SerializeField] protected string Keyword;
     public static event Action<string> AnyCollected; // 1 sự kiện chung cho mọi PuzzleObject
-    private void OnTriggerEnter2D(Collider2D collision)
+    public virtual void OnTriggerEnter2D(Collider2D collision)
     {
         PlayerController player = collision.GetComponent<PlayerController>();
         if (player != null)
         {
-            AnyCollected?.Invoke(Keyword);
+            Complete();
             Destroy(this.gameObject);
         }
+    }
+    public void Complete()
+    {
+        AnyCollected?.Invoke(Keyword);
     }
 }

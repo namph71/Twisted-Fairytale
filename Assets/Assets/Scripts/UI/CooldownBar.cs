@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum AttackType { Normal, Heavy, Ultimate, Dash }
+public enum AttackType { Normal, Heavy, Ultimate, Dash, Block }
 
 public class CooldownBar : MonoBehaviour
 {

@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class BaseBossAbility : MonoBehaviour
 {
-    [SerializeField] private HitDealer Prefab;
-    [SerializeField] private float Cooldown;
-    private BaseEnemy enemy;
+    [SerializeField] protected HitDealer Prefab;
+    [SerializeField] protected float Cooldown;
+    protected BaseEnemy enemy;
     private void Awake()
     {
         enemy = GetComponent<BaseEnemy>();
@@ -20,7 +20,7 @@ public class BaseBossAbility : MonoBehaviour
     {
         
     }
-    private IEnumerator PerformAbility()
+    public virtual IEnumerator PerformAbility()
     {
         while (true)
         {

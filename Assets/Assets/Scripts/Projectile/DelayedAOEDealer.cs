@@ -9,15 +9,16 @@ public class DelayedAOEDealer : HitDealer
     [SerializeField] private float delay = 1f;
     [Tooltip("Sau khi nổ, ai bước vào vùng trong khoảng này vẫn trúng. 0 = chỉ nổ 1 lần rồi biến mất")]
     [SerializeField] private float activeDuration = 0f;
-    private Collider2D area;
+    // Vùng nổ = tất cả collider trên object này và object con (vd: từng lưỡi của FeatherFang)
+    private Collider2D[] areas;
     private float timer;
     private bool detonated;
     private readonly List<Collider2D> overlaps = new();
 
     private void Awake()
     {
-        area = GetComponent<Collider2D>();
-        area.isTrigger = true;
+        areas = GetComponentsInChildren<Collider2D>();
+        foreach (Collider2D a in areas) a.isTrigger = true;
     }
 
     public override void Init(GameObject owner, float damage, LayerMask hitMask, float lifetime)
@@ -40,8 +41,13 @@ public class DelayedAOEDealer : HitDealer
         // sẽ không có sự kiện nào lúc nổ. Phải chủ động quét vùng.
         var filter = new ContactFilter2D { useTriggers = true };
         filter.SetLayerMask(hitMask);
-        area.Overlap(filter, overlaps);
-        foreach (var col in overlaps) TryHit(col);
+        foreach (Collider2D a in areas)
+        {
+            overlaps.Clear();
+            a.Overlap(filter, overlaps);
+            // Đứng ở chỗ 2 lưỡi chồng nhau vẫn chỉ trúng 1 lần: TryHit đã nhớ ai trúng rồi
+            foreach (var col in overlaps) TryHit(col);
+        }
         Destroy(gameObject, activeDuration); // 0 = huỷ cuối frame này
     }
     protected override void OnTriggerEnter2D(Collider2D col)

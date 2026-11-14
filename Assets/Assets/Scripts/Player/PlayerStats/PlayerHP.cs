@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,11 +35,13 @@ public class PlayerHP : MonoBehaviour, IDamageable, IHealth
         if (kb == null) return;
         if (kb.kKey.isPressed) player.Revive(Vector2.zero);
     }
-    public float GetMaxHP() { return MaxHP; }
+    public float GetMaxHP => MaxHP;
     public void TakeDamage(float amount, GameObject source)
     {
         if (source == this.gameObject) return;
         if (player.IsDead || player.IsInvulnerable) return;
+        // Đang block: đỡ được thì dừng ở đây, không trừ máu. Hết stamina thì TryBlockHit trả false, đòn trúng như thường
+        if (player.Machine.Current == player.BlockState && player.BlockState.TryBlockHit()) return;
         HP -= amount;
         if (HP <= 0f)
         {
