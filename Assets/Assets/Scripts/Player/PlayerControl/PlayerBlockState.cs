@@ -8,8 +8,8 @@ public class PlayerBlockState : PlayerState
 {
     public PlayerBlockState(PlayerController p, PlayerStateMachine m) : base(p, m) { }
 
-    // Đủ stamina để bắt đầu đỡ không. Kiểm tra trước khi ChangeState vào đây
-    public bool CanStart => !player.PlayerStamina.IsTired(player.blockStartCost);
+    // Đủ stamina để bắt đầu đỡ VÀ đỡ được ít nhất 1 đòn. Kiểm tra trước khi ChangeState vào đây
+    public bool CanStart => !player.PlayerStamina.IsTired(player.blockStartCost + player.blockHitCost);
 
     public override void Enter()
     {
@@ -40,12 +40,10 @@ public class PlayerBlockState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        // Thả F, hoặc giữ quá blockDuration: hạ khiên
-        if (!player.Input.BlockHeld || StateTime >= player.blockDuration)
-        {
+        // Bấm nhả nhanh vẫn giữ khiên đủ blockMinTime. Sau đó thả F, hoặc giữ quá blockDuration: hạ khiên
+        bool released = StateTime >= player.blockMinTime && !player.Input.BlockHeld;
+        if (released || StateTime >= player.blockDuration)
             machine.ChangeState(player.GetLocomotionState());
-            player.Weapon.PerformAttack?.Invoke(0, AttackType.Block);
-        }
     }
 
     public override void PhysicsUpdate() => player.StopMovement();
@@ -54,5 +52,7 @@ public class PlayerBlockState : PlayerState
     {
         base.Exit();
         if (player.blockShield != null) player.blockShield.SetActive(false);
+        // Đặt ở Exit để mọi đường thoát (thả F, hết giờ, vỡ thế) đều reset thanh Block
+        player.Weapon.PerformAttack?.Invoke(0, AttackType.Block);
     }
 }

@@ -18,7 +18,7 @@ MonoBehaviour:
   HitEnd: 0.3
   LungeSpeed: 1.5
   Damage: 3
-  SpawnForward: 2
+  SpawnForward: 1
   Prefab: {fileID: 7177234309779502079, guid: 1ff259e84a442094dbdf32fd8e2a93b7, type: 3}
   PrefabDirections:
   - direction: 0

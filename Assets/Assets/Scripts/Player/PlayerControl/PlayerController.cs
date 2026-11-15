@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour, IRespawnable
     public float blockDuration = 1f;
     public float blockStartCost = 10f;
     public float blockHitCost = 5f;
+    [Tooltip("Bấm nhả nhanh vẫn giữ khiên ít nhất chừng này giây")]
+    public float blockMinTime = 0.3f;
     [Tooltip("Object con (đang tắt) có Collider2D, layer nằm trong stopMask của đạn enemy")]
     public GameObject blockShield;
     [Tooltip("VFX hiện quanh player khi đỡ trúng")]

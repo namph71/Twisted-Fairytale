@@ -46,7 +46,9 @@ public class PlayerInputReader : MonoBehaviour
         if (kb.dKey.isPressed) x += 1f;
         if (kb.sKey.isPressed) y -= 1f;
         if (kb.wKey.isPressed) y += 1f;
-        Move = new Vector2(x, y);
+        Vector2 raw = new Vector2(x, y);
+        // W = lên-phải, A = lên-trái, S = xuống-trái, D = xuống-phải. ClampMagnitude: bấm 2 phím vẫn dài 1
+        Move = Vector2.ClampMagnitude(new Vector2(raw.x + raw.y, raw.y - raw.x) * 0.70710678f, 1f);
         if (kb.cKey.wasPressedThisFrame)
         {
             if (player.currentStateName == "PlayerRunState")
