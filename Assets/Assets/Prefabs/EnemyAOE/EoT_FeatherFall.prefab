@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6907175785483783655}
   - component: {fileID: -6978676313387393866}
   - component: {fileID: 5556460987921802318}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EoT_FeatherFall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

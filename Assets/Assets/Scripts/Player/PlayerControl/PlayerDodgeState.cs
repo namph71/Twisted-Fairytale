@@ -15,6 +15,7 @@ public class PlayerDodgeState : PlayerState
         player.PlayAnimation("Dodge", restart: true);
         player.PlayerStamina.ConsumeStamina(10);
         player.currentStateName = "Dodge";
+        if (player.dodgeIFramePrefab != null) Object.Instantiate(player.dodgeIFramePrefab, player.transform);
     }
 
     public override void LogicUpdate()

@@ -30,7 +30,7 @@ public class BaseBossAbility : MonoBehaviour
                 attackSpawned.Init(enemy.gameObject, Prefab.damage, enemy.attackHitMask, 1f);
                 yield return new WaitForSeconds(Cooldown);
             }
-            yield return new WaitForSeconds(Time.deltaTime);
+            yield return null;
         }
     }
 }

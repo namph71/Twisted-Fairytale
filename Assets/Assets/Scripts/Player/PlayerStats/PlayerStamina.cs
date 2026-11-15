@@ -27,32 +27,33 @@ public class PlayerStamina : MonoBehaviour
 
     }
     public float GetMaxStamina => MaxStamina;
-    public bool IsTired (float amount)
-    {
-        if (Time.time - lastUseTime < regenDelay) return true;
-        return Stamina - amount < 0;
-    }
+    // Chỉ trả lời "có đủ stamina không"
+    public bool IsTired(float amount) => Stamina < amount;
+
     public void ConsumeStamina(float amount)
     {
         if (IsTired(amount)) return;
         Stamina -= amount;
         lastUseTime = Time.time;
-        if (Stamina < 0) Stamina = 0;
         StaminaChanged?.Invoke(Stamina, MaxStamina);
+    }
+
+    private IEnumerator RegainLoop()
+    {
+        var wait = new WaitForSeconds(RegainCooldown);
+        while (true)
+        {
+            // Vừa dùng xong thì chờ regenDelay mới hồi; đầy rồi thì thôi, không bắn event thừa cho thanh UI
+            if (Stamina < MaxStamina && Time.time - lastUseTime >= regenDelay)
+                RegainStamina(RegainSpeed);
+            yield return wait;
+        }
     }
     public void RegainStamina(float amount)
     {
         Stamina += amount;
         if (Stamina >= MaxStamina) Stamina = MaxStamina;
         StaminaChanged?.Invoke(Stamina, MaxStamina);
-    }
-    private IEnumerator RegainLoop()
-    {
-        while (Stamina <= MaxStamina)
-        {
-            RegainStamina(RegainSpeed);
-            yield return new WaitForSeconds(RegainCooldown);
-        }
     }
 
     public bool TryConsume(float amount)
