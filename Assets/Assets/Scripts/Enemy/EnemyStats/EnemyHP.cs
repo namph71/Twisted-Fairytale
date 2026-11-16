@@ -44,7 +44,7 @@ public class EnemyHP : MonoBehaviour, IDamageable, IHealth
     public float CurrentHealth => HP;
     public float MaxHealth => MaxHP;
     public bool IsPlayer => false;
-    public void TakeDamage(float amount, GameObject source)
+    public void TakeDamage(float amount, GameObject source, bool Blockable)
     {
         if (source == this.gameObject) return;
         HP -= amount;

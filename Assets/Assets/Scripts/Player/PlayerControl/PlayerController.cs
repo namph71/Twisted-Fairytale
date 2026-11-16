@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -22,6 +23,18 @@ public class PlayerController : MonoBehaviour, IRespawnable
     [Header("Dash/Dodge chung")]
     [SerializeField] private float evadeCooldown = 0.3f;
     public bool IsInvulnerable { get; set; }
+    [Header("Perfect Dodge")]
+    public DodgeIFrame dodgeIFramePrefab;
+    [SerializeField] private float slowScale = 0.2f;
+    [Tooltip("Thời gian chậm, tính bằng giây thật")]
+    [SerializeField] private float slowDuration = 0.3f;
+    [SerializeField] private GameObject perfectDodgeVFX;
+
+    public DodgeIFrame ActiveIFrame { get; set; }
+    public event Action PerfectDodged;
+
+    private float baseFixedDeltaTime;
+    private Coroutine slowRoutine;
     public bool CanEvade => Time.time >= evadeReadyTime;
     private float evadeReadyTime;
     // Attack / Parry
@@ -122,6 +135,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
         ReviveState = new PlayerReviveState(this, Machine);
         PlayerHP = GetComponent<PlayerHP>();
         PlayerStamina = GetComponent<PlayerStamina>();
+        baseFixedDeltaTime = Time.fixedDeltaTime;
     }
 
     private void Start()
@@ -194,6 +208,28 @@ public class PlayerController : MonoBehaviour, IRespawnable
     }
 
     public void StartEvadeCooldown() => evadeReadyTime = Time.time + evadeCooldown;
+    public void TriggerPerfectDodge()
+    {
+        PerfectDodged?.Invoke();
+        if (perfectDodgeVFX != null) Destroy(Instantiate(perfectDodgeVFX, transform.position, Quaternion.identity), 1f);
+        if (slowRoutine != null) StopCoroutine(slowRoutine); // đang chậm mà né chuẩn tiếp: đếm lại từ đầu
+        slowRoutine = StartCoroutine(SlowWorld());
+    }
+
+    private IEnumerator SlowWorld()
+    {
+        Time.timeScale = slowScale;
+        Time.fixedDeltaTime = baseFixedDeltaTime * slowScale; // vật lý không giật khi chậm
+        yield return new WaitForSecondsRealtime(slowDuration); // giây thật, không bị chính hiệu ứng chậm kéo dài
+        RestoreTime();
+    }
+
+    private void RestoreTime()
+    {
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = baseFixedDeltaTime;
+        slowRoutine = null;
+    }
 
     // ===== Attack/Parry =====
     public Vector2 FacingScreenDir

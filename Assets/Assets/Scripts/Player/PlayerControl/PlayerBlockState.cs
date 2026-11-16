@@ -25,6 +25,7 @@ public class PlayerBlockState : PlayerState
     // PlayerHP gọi khi bị trúng đòn lúc đang đỡ. true = đỡ được, không mất máu
     public bool TryBlockHit()
     {
+        Debug.Log($"[Block] đỡ đòn | IsTired({player.blockHitCost}) = {player.PlayerStamina.IsTired(player.blockHitCost)}");
         if (player.PlayerStamina.IsTired(player.blockHitCost))
         {
             machine.ChangeState(player.GetLocomotionState()); // hết sức: vỡ thế, đòn này trúng

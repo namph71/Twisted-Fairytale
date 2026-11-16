@@ -10,7 +10,7 @@ public class VulnerableObject : PuzzleObject, IDamageable
     {
         return;
     }
-    public void TakeDamage(float amount, GameObject source)
+    public void TakeDamage(float amount, GameObject source, bool Blockable)
     {
         if (source.GetComponent<PlayerController>() != null)
         {

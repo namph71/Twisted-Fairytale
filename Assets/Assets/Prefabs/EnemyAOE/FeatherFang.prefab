@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2564797785589362068}
   - component: {fileID: 5433598646599287094}
   - component: {fileID: 4269173839690588700}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 2480880336269574911}
   - component: {fileID: 2475889607359255909}
   - component: {fileID: 6901402286826865661}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 1231472421554415178}
   - component: {fileID: 7370669050957078579}
   - component: {fileID: 277196035272949163}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -411,7 +411,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5506209851992014039}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -443,7 +443,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8128975753121763508}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -475,7 +475,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2530136316331307368}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -507,7 +507,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8568054047927349002}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spinner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -545,7 +545,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 148393847180566210}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -579,7 +579,7 @@ GameObject:
   - component: {fileID: 39034659558989509}
   - component: {fileID: 7148566711484562279}
   - component: {fileID: 7298668484651287954}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -711,7 +711,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4745462980035721152}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -743,7 +743,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1660713619099965055}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,7 +777,7 @@ GameObject:
   - component: {fileID: 3268441401137157465}
   - component: {fileID: 187714761854514126}
   - component: {fileID: 8986767668136344012}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -911,7 +911,7 @@ GameObject:
   - component: {fileID: 4691790630951923658}
   - component: {fileID: 1030775000044265808}
   - component: {fileID: 2121487489955626682}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FeatherFang
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -987,7 +987,7 @@ GameObject:
   - component: {fileID: 3138991430481046129}
   - component: {fileID: 3745740665506322736}
   - component: {fileID: 8603367145931558322}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1121,7 +1121,7 @@ GameObject:
   - component: {fileID: 5035289015861586533}
   - component: {fileID: 2824026976590594592}
   - component: {fileID: 3606154840914825386}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1253,7 +1253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6044741240268965433}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

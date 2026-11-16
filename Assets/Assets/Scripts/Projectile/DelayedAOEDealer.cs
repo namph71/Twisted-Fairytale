@@ -14,7 +14,7 @@ public class DelayedAOEDealer : HitDealer
     private float timer;
     private bool detonated;
     private readonly List<Collider2D> overlaps = new();
-
+    public override bool IsDangerous => detonated; // đang cảnh báo thì chưa tính là đòn nguy hiểm
     private void Awake()
     {
         areas = GetComponentsInChildren<Collider2D>();
