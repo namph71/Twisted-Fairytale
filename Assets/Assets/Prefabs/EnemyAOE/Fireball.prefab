@@ -107,6 +107,9 @@ MonoBehaviour:
   TurnSpeed: 180
   isoYScale: 0.5
   MaxLifetime: 5
+  HitMask:
+    serializedVersion: 2
+    m_Bits: 576
   RotateToVelocity: 1
   SpriteAngleOffset: -90
 --- !u!61 &4322404245326593370

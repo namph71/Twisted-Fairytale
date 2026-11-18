@@ -20,7 +20,12 @@ public class DelayedAOEDealer : HitDealer
         areas = GetComponentsInChildren<Collider2D>();
         foreach (Collider2D a in areas) a.isTrigger = true;
     }
-
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        timer = 0f;
+        detonated = false;
+    }
     public override void Init(GameObject owner, float damage, LayerMask hitMask, float lifetime)
     {
         // Không để object bị huỷ trước khi kịp nổ xong

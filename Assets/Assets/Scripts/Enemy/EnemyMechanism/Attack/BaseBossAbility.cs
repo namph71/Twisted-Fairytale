@@ -6,11 +6,12 @@ public class BaseBossAbility : MonoBehaviour
     [SerializeField] protected HitDealer Prefab;
     [SerializeField] protected float Cooldown;
     protected BaseEnemy enemy;
-    private void Awake()
+    protected virtual void Awake()
     {
         enemy = GetComponent<BaseEnemy>();
     }
-    void OnEnable()
+
+    protected virtual void OnEnable()
     {
         StartCoroutine(PerformAbility());
     }

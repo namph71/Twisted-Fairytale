@@ -8,6 +8,16 @@ public class HitDealer : MonoBehaviour
     protected LayerMask hitMask;
     private HashSet<IDamageable> alreadyHit = new();
     private readonly HashSet<IDamageable> ignored = new();
+    // Bật lại (SetActive true) = một lượt đánh mới: quên ai đã trúng, ai đã né ở lượt trước
+    protected virtual void OnEnable()
+    {
+        alreadyHit.Clear();
+        ignored.Clear();
+    }
+    public void Setup(GameObject owner, float damage, LayerMask hitMask)
+    {
+        this.owner = owner; this.damage = damage; this.hitMask = hitMask;
+    }
 
     /// <summary>Đòn có đang gây damage không. DelayedAOEDealer: chỉ sau khi nổ.</summary>
     public virtual bool IsDangerous => true;

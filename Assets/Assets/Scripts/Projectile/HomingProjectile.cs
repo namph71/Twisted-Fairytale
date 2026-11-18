@@ -14,7 +14,9 @@ public class HomingProjectile : MonoBehaviour
     [SerializeField] private float isoYScale = 0.5f;
     [Tooltip("Bay quá lâu không trúng thì tự huỷ")]
     [SerializeField] private float MaxLifetime = 5f;
-
+    [Tooltip("Layer trúng được: thân player và khiên (Player, Shield). KHÔNG tick layer hitbox đòn đánh")]
+    [SerializeField] private LayerMask HitMask;
+    private bool hasHit;
     [Header("Xoay sprite theo hướng bay")]
     [SerializeField] private bool RotateToVelocity = true;
     [Tooltip("Sprite vẽ chĩa lên (trục Y) thì -90, chĩa sang phải (trục X) thì 0")]
@@ -64,13 +66,13 @@ public class HomingProjectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (targetTransform == null) return;
-        // Collider chạm vào có thể là con của mục tiêu (hitbox, body...)
-        PlayerController p = collision.GetComponentInParent<PlayerController>();
-        Debug.Log($"[Homing] trúng {collision.name} | state: {(p != null ? p.currentStateName : "không phải player")} | " +
-                  $"Target là {(Target as Component)?.GetType().Name}", collision);
+        if (hasHit || targetTransform == null) return;
+        // Hitbox nhát chém cũng là con của player nhưng nằm layer khác: bỏ qua, không tính là trúng người
+        if ((HitMask.value & (1 << collision.gameObject.layer)) == 0) return;
+        // InParent để khiên (con của Player) tìm được PlayerHP ở object cha
         if (collision.GetComponentInParent<IDamageable>() == Target)
         {
+            hasHit = true; // Destroy chờ tới cuối frame: chặn lần chạm thứ 2 (khiên + thân cùng lúc)
             Target.TakeDamage(Damage, Source);
             Destroy(gameObject);
         }
