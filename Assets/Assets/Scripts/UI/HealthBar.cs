@@ -86,7 +86,7 @@ public class HealthBar : MonoBehaviour
         {
             TweenFill(fillImage, ratio, mainTime, 0f, ease);
             TweenFill(whiteImage, ratio, whiteTime, whiteWait, whiteEase);
-            if (HPText != null) HPText.text = $"Health: {health.CurrentHealth:0} / {health.MaxHealth:0}";
+            if (HPText != null) HPText.text = $"{health.CurrentHealth:0} / {health.MaxHealth:0}";
         }
         else
         {

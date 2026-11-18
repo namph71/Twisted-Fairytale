@@ -55,6 +55,6 @@ public class StaminaBar : MonoBehaviour
             else whiteImage.DOFillAmount(ratio, whiteDuration).SetDelay(whiteDelay).SetEase(whiteEase);
         }
 
-        if (StaminaText != null) StaminaText.text = $"Stamina: {current:0} / {max:0}";
+        if (StaminaText != null) StaminaText.text = $"{current:0} / {max:0}";
     }
 }
