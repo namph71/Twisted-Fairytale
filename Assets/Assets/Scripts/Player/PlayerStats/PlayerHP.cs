@@ -59,6 +59,14 @@ public class PlayerHP : MonoBehaviour, IDamageable, IHealth
         if (HP > MaxHP) HP = MaxHP;
         HealthChanged?.Invoke(HP, MaxHP, true);
     }
+    public void UseHealthPotion()
+    {
+        if (player.PlayerInformation.CanUseHealthPotion && HP < MaxHP)
+        {
+            RegainHP(50);
+            player.PlayerInformation.OnUseHealthPotion();
+        }
+    }
     private IEnumerator HurtEffect()
     {
         PlayerSpriteRenderer.color = HurtColor;

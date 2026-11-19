@@ -1759,6 +1759,7 @@ GameObject:
   - component: {fileID: 135560501}
   - component: {fileID: 135560503}
   - component: {fileID: 135560502}
+  - component: {fileID: 135560510}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -2018,6 +2019,23 @@ MonoBehaviour:
   inputDeadzone: 0.2
   animator: {fileID: 1160356261631345646}
   <currentStateName>k__BackingField: 
+--- !u!114 &135560510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135560498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160ad51d9d39e8840bb339a313869e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 748acf4fc2030c04abd2355782675c0f, type: 2}
+  HealthPotionText: {fileID: 1287873872}
+  HealthPotionIcon: {fileID: 453467708}
+  StaminaPotionText: {fileID: 970840543}
+  StaminaPotionIcon: {fileID: 1853091098}
 --- !u!1 &147137984
 GameObject:
   m_ObjectHideFlags: 0
@@ -3435,7 +3453,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 249714507}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 135560499}
+        m_TargetAssemblyTypeName: PlayerStamina, Assembly-CSharp
+        m_MethodName: UseStaminaPotion
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &249714507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17584,7 +17614,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -27.634}
+  m_AnchoredPosition: {x: 0, y: -27.633972}
   m_SizeDelta: {x: -100, y: -155.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1179424414
@@ -25213,7 +25243,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1785555826}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 135560506}
+        m_TargetAssemblyTypeName: PlayerHP, Assembly-CSharp
+        m_MethodName: UseHealthPotion
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1785555826
 MonoBehaviour:
   m_ObjectHideFlags: 0

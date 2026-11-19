@@ -97,6 +97,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
     // ===== Stats =====
     public PlayerHP PlayerHP { get; private set; }
     public PlayerStamina PlayerStamina { get; private set; }
+    public PlayerInformation PlayerInformation { get; private set; }
     public event Action Died;
     public event Action DeathSequenceFinished;
     public bool IsDead => Machine.Current == DieState;
@@ -135,6 +136,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
         ReviveState = new PlayerReviveState(this, Machine);
         PlayerHP = GetComponent<PlayerHP>();
         PlayerStamina = GetComponent<PlayerStamina>();
+        PlayerInformation = GetComponent<PlayerInformation>();
         baseFixedDeltaTime = Time.fixedDeltaTime;
     }
 
@@ -271,6 +273,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
         Machine.ChangeState(ReviveState);
         PlayerHP.RegainHP(PlayerHP.GetMaxHP);
         PlayerStamina.RegainStamina(PlayerStamina.GetMaxStamina);
+        PlayerInformation.RegainPotions();
         IsInvulnerable = true;
     }
 

@@ -3,10 +3,11 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Stamina được xài cho heavy attack, dash / dodge
+/// Stamina được xài cho dash / dodge, block
 /// </summary>
 public class PlayerStamina : MonoBehaviour
 {
+    private PlayerController player;
     [SerializeField] private float Stamina;
     [SerializeField] private float MaxStamina;
     [Tooltip("Tốc độ hồi stamina mỗi cooldown")]
@@ -16,6 +17,10 @@ public class PlayerStamina : MonoBehaviour
     public Action<float, float> StaminaChanged;
     private float lastUseTime = float.NegativeInfinity;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private void Awake()
+    {
+        player = GetComponent<PlayerController>();
+    }
     void Start()
     {
         StartCoroutine(RegainLoop());
@@ -55,7 +60,14 @@ public class PlayerStamina : MonoBehaviour
         if (Stamina >= MaxStamina) Stamina = MaxStamina;
         StaminaChanged?.Invoke(Stamina, MaxStamina);
     }
-
+    public void UseStaminaPotion()
+    {
+        if (player.PlayerInformation.CanUseStaminaPotion && Stamina < MaxStamina)
+        {
+            RegainStamina(50);
+            player.PlayerInformation.OnUseStaminaPotion();
+        }
+    }
     public bool TryConsume(float amount)
     {
         if (Stamina < amount) return false;
