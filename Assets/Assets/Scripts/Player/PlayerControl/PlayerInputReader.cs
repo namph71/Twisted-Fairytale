@@ -12,7 +12,6 @@ public class PlayerInputReader : MonoBehaviour
 {
     [Tooltip("Bấm sớm trong khoảng này vẫn được tính (vd: bấm dash khi đang attack)")]
     [SerializeField] private float bufferTime = 0.15f;
-    private PlayerController player;
     private PlayerWeapon playerWeapon;
     public Vector2 Move { get; private set; }
 
@@ -32,7 +31,6 @@ public class PlayerInputReader : MonoBehaviour
     public bool BlockHeld { get; private set; } // F đang được giữ
     private void Awake()
     {
-        player = GetComponent<PlayerController>();
         playerWeapon = GetComponent<PlayerWeapon>();       
     }
 
@@ -51,15 +49,15 @@ public class PlayerInputReader : MonoBehaviour
         Move = Vector2.ClampMagnitude(new Vector2(raw.x + raw.y, raw.y - raw.x) * 0.70710678f, 1f);
         if (kb.cKey.wasPressedThisFrame)
         {
-            if (player.currentStateName == "PlayerRunState")
+            if (PlayerController.Instance.currentStateName == "PlayerRunState")
             {
-                if (!player.PlayerStamina.IsTired(10)) dashTime = Time.time;
+                if (!PlayerController.Instance.PlayerStamina.IsTired(10)) dashTime = Time.time;
             }
             else
             {
-                if (!player.PlayerStamina.IsTired(10)) dodgeTime = Time.time;
+                if (!PlayerController.Instance.PlayerStamina.IsTired(10)) dodgeTime = Time.time;
             }
-            playerWeapon.PerformAttack?.Invoke(player.dashDuration, AttackType.Dash);
+            playerWeapon.PerformAttack?.Invoke(PlayerController.Instance.dashDuration, AttackType.Dash);
         }
         if (kb.fKey.wasPressedThisFrame) blockTime = Time.time; // giữ nguyên: lúc bấm xuống để vào Block
         BlockHeld = kb.fKey.isPressed;                          // mới: giữ F thì còn block
@@ -85,7 +83,7 @@ public class PlayerInputReader : MonoBehaviour
             if (held < tapMaxTime)
             {
                 attackTime = Time.time; // bấm nhanh
-                playerWeapon.PerformAttack?.Invoke(playerWeapon.CurrentWeaponEquipped.NormalAttack.Duration, AttackType.Normal);
+                playerWeapon.PerformAttack?.Invoke(playerWeapon.CurrentWeaponEquipped.weaponData.NormalAttack.Duration, AttackType.Normal);
             }
             else
             {
@@ -102,8 +100,9 @@ public class PlayerInputReader : MonoBehaviour
 
     private void FireHeavy()
     {
+        if (playerWeapon.CurrentWeaponEquipped.Level < 5) return;
         heavyAttackTime = Time.time;
-        playerWeapon.PerformAttack?.Invoke(playerWeapon.CurrentWeaponEquipped.HeavyAttack.Duration, AttackType.Heavy);
+        playerWeapon.PerformAttack?.Invoke(playerWeapon.CurrentWeaponEquipped.weaponData.HeavyAttack.Duration, AttackType.Heavy);
     }
     // Consume = lấy và xoá, tránh 1 lần bấm kích hoạt 2 lần
     public bool ConsumeAttack() => Consume(ref attackTime);

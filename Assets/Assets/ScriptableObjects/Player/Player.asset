@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b4a5c4b48c8eb479f594206ec826c1, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
+  MaxHealth: 100
+  MaxStamina: 100
   MaxHealthPotionAmount: 5
   MaxStaminaPotionAmount: 5

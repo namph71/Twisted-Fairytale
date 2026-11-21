@@ -5,8 +5,7 @@ using UnityEngine.InputSystem;
 
 public class EnemyHP : MonoBehaviour, IDamageable, IHealth
 {
-    [SerializeField] private float HP;
-    [SerializeField] private float MaxHP;
+    private float HP;
     [SerializeField] private Color HurtColor;
     [SerializeField] private GameObject HitEffect;
     private BaseEnemy enemy;
@@ -27,7 +26,7 @@ public class EnemyHP : MonoBehaviour, IDamageable, IHealth
         {
             originalColors[i] = EnemySpriteRenderers[i].color;
         }
-
+        HP = enemy.enemyData.MaxHP;
         hitEffectArea = GetComponent<Collider2D>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -42,7 +41,7 @@ public class EnemyHP : MonoBehaviour, IDamageable, IHealth
 
     }
     public float CurrentHealth => HP;
-    public float MaxHealth => MaxHP;
+    public float MaxHealth => enemy.enemyData.MaxHP;
     public bool IsPlayer => false;
     public void TakeDamage(float amount, GameObject source, bool Blockable)
     {
@@ -55,15 +54,15 @@ public class EnemyHP : MonoBehaviour, IDamageable, IHealth
             enemy.Die();
             return;
         }
-        HealthChanged?.Invoke(HP, MaxHP, false);
+        HealthChanged?.Invoke(HP, enemy.enemyData.MaxHP, false);
         if (hurtRoutine != null) StopCoroutine(hurtRoutine);
         hurtRoutine = StartCoroutine(HurtEffect());
     }
     public void RegainHP(float amount)
     {
         HP += amount;
-        if (HP > MaxHP) HP = MaxHP;
-        HealthChanged?.Invoke(HP, MaxHP, false);
+        if (HP > enemy.enemyData.MaxHP) HP = enemy.enemyData.MaxHP;
+        HealthChanged?.Invoke(HP, enemy.enemyData.MaxHP, false);
     }
     private IEnumerator HurtEffect()
     {

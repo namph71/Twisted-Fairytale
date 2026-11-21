@@ -1,72 +1,81 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
+[DefaultExecutionOrder(-80)]
 public class PlayerHP : MonoBehaviour, IDamageable, IHealth
 {
-    [SerializeField] private float HP;
-    [SerializeField] private float MaxHP;
-    [SerializeField] private Color32 HurtColor;
+    private float HP;
+    private PlayerInformation info;
+
     public float CurrentHealth => HP;
-    public float MaxHealth => MaxHP;
+
+    // Gốc lấy từ PlayerData, nhân hệ số sao (0 sao = x1 = đúng giá trị PlayerData)
+    public float MaxHealth =>
+        info.playerData.MaxHealth
+        * (StarManager.Instance?.GetStarsMultiplier(StatType.Health) ?? 1f);
+
+    [SerializeField] private Color32 HurtColor;
     public bool IsPlayer => true;
-    private PlayerController player;
     public event Action<float, float, bool> HealthChanged;
     [field: SerializeField] public SpriteRenderer PlayerSpriteRenderer { get; set; }
     private Coroutine hurtRoutine;
     private WaitForSeconds hurtWait = new WaitForSeconds(0.15f);
+
     private void Awake()
     {
-        player = GetComponent<PlayerController>();
+        // Lấy trực tiếp trên cùng object, không phụ thuộc PlayerController.Instance đã sẵn sàng hay chưa
+        info = GetComponent<PlayerInformation>();
         if (PlayerSpriteRenderer == null) PlayerSpriteRenderer = GetComponent<SpriteRenderer>();
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private void Start()
     {
-        
+        // Mặc định: đầy máu. Nếu có save, SaveManager.ApplyToPlayer sẽ ghi đè sau
+        SetHealth(MaxHealth);
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>Đặt máu về một giá trị cụ thể (load save, mặc định) và cập nhật UI.</summary>
+    public void SetHealth(float value)
     {
-        var kb = Keyboard.current;
-        var mouse = Mouse.current;
-        if (kb == null) return;
-        if (kb.kKey.isPressed) player.Revive(Vector2.zero);
+        HP = Mathf.Clamp(value, 0f, MaxHealth);
+        HealthChanged?.Invoke(HP, MaxHealth, true);
     }
-    public float GetMaxHP => MaxHP;
+
     public void TakeDamage(float amount, GameObject source, bool blockable = true)
     {
         if (source == this.gameObject) return;
-        if (player.IsDead || player.IsInvulnerable) return;
+        if (PlayerController.Instance.IsDead || PlayerController.Instance.IsInvulnerable) return;
         // Đang block: đỡ được thì dừng ở đây, không trừ máu. Hết stamina thì TryBlockHit trả false, đòn trúng như thường
-        if (blockable && player.Machine.Current == player.BlockState && player.BlockState.TryBlockHit()) return;
+        if (blockable && PlayerController.Instance.Machine.Current == PlayerController.Instance.BlockState && PlayerController.Instance.BlockState.TryBlockHit()) return;
         HP -= amount;
         if (HP <= 0f)
         {
             HP = 0f;
-            player.Die();
+            PlayerController.Instance.Die();
         }
-        HealthChanged?.Invoke(HP, MaxHP, true);
+        HealthChanged?.Invoke(HP, MaxHealth, true);
         if (hurtRoutine != null) StopCoroutine(hurtRoutine);
         hurtRoutine = StartCoroutine(HurtEffect());
     }
+
     public void RegainHP(float amount)
     {
-        if (player.IsDead || player.IsInvulnerable) return;
+        if (PlayerController.Instance.IsDead || PlayerController.Instance.IsInvulnerable) return;
         HP += amount;
-        if (HP > MaxHP) HP = MaxHP;
-        HealthChanged?.Invoke(HP, MaxHP, true);
+        if (HP > MaxHealth) HP = MaxHealth;
+        HealthChanged?.Invoke(HP, MaxHealth, true);
     }
+
     public void UseHealthPotion()
     {
-        if (player.PlayerInformation.CanUseHealthPotion && HP < MaxHP)
+        if (info.CanUseHealthPotion && HP < MaxHealth)
         {
             RegainHP(50);
-            player.PlayerInformation.OnUseHealthPotion();
+            info.OnUseHealthPotion();
         }
     }
+
     private IEnumerator HurtEffect()
     {
         PlayerSpriteRenderer.color = HurtColor;

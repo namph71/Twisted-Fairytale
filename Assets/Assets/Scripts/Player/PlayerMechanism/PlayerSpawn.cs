@@ -9,26 +9,22 @@ public class PlayerSpawn : MonoBehaviour
     [Tooltip("Đặt player vào spawn mặc định khi bắt đầu scene")]
     [SerializeField] private bool spawnAtStart = true;
 
-    private PlayerController player;
-
-    private void Awake() => player = GetComponent<PlayerController>();
-
-    private void OnEnable() => player.DeathSequenceFinished += Respawn;
-    private void OnDisable() => player.DeathSequenceFinished -= Respawn;
+    private void OnEnable() => PlayerController.Instance.DeathSequenceFinished += Respawn;
+    private void OnDisable() => PlayerController.Instance.DeathSequenceFinished -= Respawn;
 
     private void Start()
     {
         if (spawnAtStart && SpawnerManager.Instance != null)
-            Teleport(SpawnerManager.Instance.GetSpawnPosition(player.Rb.position));
+            Teleport(SpawnerManager.Instance.GetSpawnPosition(PlayerController.Instance.Rb.position));
     }
 
     public void Respawn()
     {
         Vector2 pos = SpawnerManager.Instance != null
-            ? SpawnerManager.Instance.GetSpawnPosition(player.Rb.position)
-            : player.Rb.position;
+            ? SpawnerManager.Instance.GetSpawnPosition(PlayerController.Instance.Rb.position)
+            : PlayerController.Instance.Rb.position;
 
-        player.Revive(pos);
+        PlayerController.Instance.Revive(pos);
 
         // TODO: đổi theo tên hàm trong class của bạn
         // player.HP.ResetHP();
@@ -37,8 +33,8 @@ public class PlayerSpawn : MonoBehaviour
 
     private void Teleport(Vector2 pos)
     {
-        player.Rb.position = pos;
+        PlayerController.Instance.Rb.position = pos;
         transform.position = pos;
-        player.StopMovement();
+        PlayerController.Instance.StopMovement();
     }
 }

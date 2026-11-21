@@ -1,22 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class BaseEnemy : MonoBehaviour, IRespawnable
 {
+    public EnemyData enemyData;
     public PlayerController TargetPlayer { get; set; }
     public LayerMask attackHitMask;
-
     [Header("Respawn")]
-    [Tooltip("Tắt: chết là mất luôn (Guardian, boss)")]
-    [SerializeField] private bool canRespawn = true;
-    [SerializeField] private float respawnCooldown = 5f;
     [Tooltip("Spawner riêng của enemy này (bỏ tick isCheckpoint). Trống = hồi sinh tại vị trí đặt ban đầu")]
     [SerializeField] private Spawner homeSpawner;
     private EnemyChase enemyChase;
+    
     // ===== IRespawnable =====
     public bool IsDead { get; protected set; }
     public bool UsesCheckpoint => false;       // enemy không bao giờ đổi checkpoint
     public Spawner HomeSpawner => homeSpawner;
     public Vector2 InitialPosition { get; private set; }
+    // Experience
+    public static event Action<float> GiveWeaponExperience;
 
     protected virtual void Awake()
     {
@@ -28,16 +29,15 @@ public class BaseEnemy : MonoBehaviour, IRespawnable
     {
         if (IsDead) return;
         IsDead = true;
-
-        if (canRespawn)
+        GiveWeaponExperience?.Invoke(enemyData.WeaponExperience);
+        if (enemyData.canRespawn)
         {
             // Hẹn giờ ở SpawnerManager: coroutine chạy trên chính enemy sẽ chết theo SetActive(false)
             if (SpawnerManager.Instance != null)
-                SpawnerManager.Instance.ScheduleRespawn(this, respawnCooldown);
+                SpawnerManager.Instance.ScheduleRespawn(this, enemyData.RespawnCooldown);
             else
                 Debug.LogWarning("[BaseEnemy] Scene không có SpawnerManager, enemy sẽ không hồi sinh", this);
         }
-
         gameObject.SetActive(false);
     }
 

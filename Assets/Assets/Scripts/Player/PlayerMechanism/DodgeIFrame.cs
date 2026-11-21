@@ -12,18 +12,15 @@ public class DodgeIFrame : MonoBehaviour
     [SerializeField] private LayerMask dodgeableMask;
     [Tooltip("Thời gian sống = khoảng né chuẩn (giây)")]
     [SerializeField] private float lifetime = 0.2f;
-
-    private PlayerController player;
     private IDamageable playerTarget;
     private bool triggered;
 
     private void Awake()
     {
-        player = GetComponentInParent<PlayerController>();
-        if (player != null)
+        if (PlayerController.Instance != null)
         {
-            playerTarget = player.GetComponent<IDamageable>();
-            player.ActiveIFrame = this;
+            playerTarget = PlayerController.Instance.GetComponent<IDamageable>();
+            PlayerController.Instance.ActiveIFrame = this;
         }
         GetComponent<Collider2D>().isTrigger = true;
         Destroy(gameObject, lifetime);
@@ -31,7 +28,7 @@ public class DodgeIFrame : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (player != null && player.ActiveIFrame == this) player.ActiveIFrame = null;
+        if (PlayerController.Instance != null && PlayerController.Instance.ActiveIFrame == this) PlayerController.Instance.ActiveIFrame = null;
     }
 
     // Vùng i-frame chạm vào đòn đang gây damage: né sát sạt cũng tính là né chuẩn
@@ -50,13 +47,13 @@ public class DodgeIFrame : MonoBehaviour
     /// </summary>
     public bool TryDodge(HitDealer dealer)
     {
-        if (player == null || (dodgeableMask.value & (1 << dealer.gameObject.layer)) == 0) return false;
+        if (PlayerController.Instance == null || (dodgeableMask.value & (1 << dealer.gameObject.layer)) == 0) return false;
 
         dealer.Ignore(playerTarget);
         if (!triggered)
         {
             triggered = true;
-            player.TriggerPerfectDodge();
+            PlayerController.Instance.TriggerPerfectDodge();
         }
         return true;
     }

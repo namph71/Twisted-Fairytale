@@ -6,6 +6,7 @@ using UnityEngine;
 /// "Context" của FSM: giữ component, thông số, và các hàm dùng chung cho mọi state.
 /// Bản thân class này KHÔNG chứa logic chuyển state - việc đó thuộc về từng state.
 /// </summary>
+[DefaultExecutionOrder(-75)]
 public class PlayerController : MonoBehaviour, IRespawnable
 {
     // General stats
@@ -58,6 +59,8 @@ public class PlayerController : MonoBehaviour, IRespawnable
     // Die
     [Header("Die")]
     public float deathSequenceTime = 1.5f;
+    public StarDrop StarDropPrefab;
+    private StarDrop CurrentStarDrop;
     // Respawn
     [Header("Respawn")]
     [Tooltip("Tắt: chết xong đứng im, chỉ hồi sinh khi gọi Revive (vd: phím K)")]
@@ -73,7 +76,7 @@ public class PlayerController : MonoBehaviour, IRespawnable
 
     [Header("Debug (read only)")]
     [field: SerializeField] public string currentStateName { get; set; }
-
+    public static PlayerController Instance;
     public PlayerMovement Movement { get; private set; }
     public PlayerAttack Attack { get; private set; }
     public PlayerWeapon Weapon { get; private set; }
@@ -117,6 +120,15 @@ public class PlayerController : MonoBehaviour, IRespawnable
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
         Movement = GetComponent<PlayerMovement>();
         Attack = GetComponent<PlayerAttack>();
         Weapon = GetComponent<PlayerWeapon>();
@@ -140,10 +152,23 @@ public class PlayerController : MonoBehaviour, IRespawnable
         baseFixedDeltaTime = Time.fixedDeltaTime;
     }
 
+    // Start: áp save sau 1 frame, khi mọi component đã khởi tạo xong
     private void Start()
     {
         Machine.Initialize(IdleState);
         DeathSequenceFinished += HandleDeathSequenceFinished;
+        StartCoroutine(ApplySaveNextFrame());
+    }
+
+    private IEnumerator ApplySaveNextFrame()
+    {
+        yield return null;
+        SaveManager.Instance?.ApplyToPlayer(this);
+        if (SaveManager.Instance != null && SaveManager.Instance.Data.HasStarDrop)
+        {
+            CurrentStarDrop = Instantiate(StarDropPrefab, SaveManager.Instance.Data.StarDropPosition, Quaternion.identity);
+            CurrentStarDrop.InitFromSave();
+        }
     }
 
     private void OnDestroy()
@@ -263,6 +288,10 @@ public class PlayerController : MonoBehaviour, IRespawnable
     {
         if (IsDead) return;
         Machine.ChangeState(DieState);
+        if (CurrentStarDrop != null) Destroy(CurrentStarDrop.gameObject);
+        CurrentStarDrop = Instantiate(StarDropPrefab, transform.position, Quaternion.identity);
+        CurrentStarDrop.Init();
+        StarAnnouncement.Instance.SpawnAny("Your pages scatter where you fell. Collect them again.");
     }
 
     public void Revive(Vector2 position)
@@ -271,8 +300,8 @@ public class PlayerController : MonoBehaviour, IRespawnable
         Movement.Teleport(position);
         Movement.ResetFacing();
         Machine.ChangeState(ReviveState);
-        PlayerHP.RegainHP(PlayerHP.GetMaxHP);
-        PlayerStamina.RegainStamina(PlayerStamina.GetMaxStamina);
+        PlayerHP.RegainHP(PlayerHP.MaxHealth);
+        PlayerStamina.RegainStamina(PlayerStamina.MaxStamina);
         PlayerInformation.RegainPotions();
         IsInvulnerable = true;
     }
@@ -333,4 +362,5 @@ public class PlayerController : MonoBehaviour, IRespawnable
         animator.SetFloat(FaceXParam, dir.x);
         animator.SetFloat(FaceYParam, dir.y);
     }
+
 }

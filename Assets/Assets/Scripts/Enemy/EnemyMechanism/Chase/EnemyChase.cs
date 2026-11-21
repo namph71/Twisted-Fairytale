@@ -12,7 +12,7 @@ using UnityEngine;
 /// </summary>
 public class EnemyChase : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 2.5f;
+    private float moveSpeed;
     [Tooltip("Tới gần player cỡ này thì dừng (để tấn công)")]
     [SerializeField] private float stopDistance = 0.6f;
     [Tooltip("Dừng tấn công trong bao lâu")]
@@ -43,6 +43,7 @@ public class EnemyChase : MonoBehaviour
         enemy = GetComponent<BaseEnemy>();
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
+        moveSpeed = enemy.enemyData.MoveSpeed;
     }
 
     private void OnDisable()

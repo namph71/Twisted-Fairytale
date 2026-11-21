@@ -18,8 +18,6 @@ public class StaminaBar : MonoBehaviour
     [SerializeField] private float whiteDelay = 0.15f;
     [SerializeField] private float whiteDuration = 0.3f;
     [SerializeField] private Ease whiteEase = Ease.InQuad;
-
-    [SerializeField] private PlayerStamina player;
     void Start()
     {
         
@@ -32,11 +30,11 @@ public class StaminaBar : MonoBehaviour
     }
     private void OnEnable()
     {
-        player.StaminaChanged += OnStaminaChanged;
+        PlayerController.Instance.PlayerStamina.StaminaChanged += OnStaminaChanged;
     }
     private void OnDisable()
     {
-        player.StaminaChanged -= OnStaminaChanged;
+        PlayerController.Instance.PlayerStamina.StaminaChanged -= OnStaminaChanged;
     }
 
     private void OnStaminaChanged(float current, float max)

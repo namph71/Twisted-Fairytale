@@ -6,6 +6,7 @@ using UnityEngine.UI;
 // Thanh máu: đăng ký nghe IHealth.HealthChanged, chạy mượt bằng DOTween.
 //   Player (IsPlayer = true) : Image trên HUD góc màn hình, đổi fillAmount.
 //   Enemy  (IsPlayer = false): object trong scene đặt ở mục tiêu (vd: SpriteRenderer), đổi scale X.
+[DefaultExecutionOrder(100)]
 public class HealthBar : MonoBehaviour
 {
     [Tooltip("Object có PlayerHP/EnemyHP. Trống = tự tìm ở các object cha (thanh máu gắn trên enemy)")]

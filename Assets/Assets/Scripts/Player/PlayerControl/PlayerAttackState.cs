@@ -72,7 +72,7 @@ public class PlayerAttackState : PlayerState
         Vector2 forward = IsoDirection.ToIso(IsoDirection.ToVector(player.Facing), player.IsoYScale);
         Vector2 spawnPos = player.AttackHitboxCenter + forward * current.SpawnForward;
         attackSpawned = Object.Instantiate(current.Prefab, spawnPos, current.GetRotation(player.Facing), player.transform);
-        attackSpawned.Init(player.gameObject, current.Damage, player.attackHitMask,
+        attackSpawned.Init(player.gameObject, current.Damage * StarManager.Instance.GetStarsMultiplier(StatType.Damage) * weapon.CurrentWeaponEquipped.DamageMultiplier, player.attackHitMask,
             current.HitEnd - current.HitStart);
     }
 
@@ -90,7 +90,7 @@ public class PlayerAttackState : PlayerState
         // Biến cục bộ, không gán vào attackSpawned: ultimate tự sống theo UltimateAOELifespan,
         // Exit() khi hết đòn không được xoá nó (giữ như hành vi cũ của PlayerWeapon)
         HitDealer spawned = Object.Instantiate(current.Prefab, player.AttackHitboxCenter, rot, player.transform);
-        spawned.Init(player.gameObject, current.Damage, player.attackHitMask, weapon.CurrentWeaponEquipped.UltimateAOELifespan);
+        spawned.Init(player.gameObject, current.Damage * StarManager.Instance.GetStarsMultiplier(StatType.Damage) * weapon.CurrentWeaponEquipped.DamageMultiplier, player.attackHitMask, weapon.CurrentWeaponEquipped.weaponData.UltimateAOELifespan);
 
         if (spawned.TryGetComponent(out MovingProjectile projectile))
         {

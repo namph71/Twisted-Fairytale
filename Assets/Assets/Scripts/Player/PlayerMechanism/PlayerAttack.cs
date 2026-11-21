@@ -34,8 +34,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float markerMaxWidth = 4f;
 
     public Transform CurrentTarget { get; private set; }
-
-    private PlayerController player;
     private readonly List<Collider2D> hits = new();
     private ContactFilter2D filter;
     private float lastAimTime = float.NegativeInfinity;
@@ -50,14 +48,13 @@ public class PlayerAttack : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponent<PlayerController>();
         filter = new ContactFilter2D { useTriggers = true }; // hurtbox enemy thường là trigger
     }
 
     private void Update()
     {
         // Chỉ để hiện marker cho người chơi biết sẽ đánh vào ai. Lúc ra đòn vẫn chọn lại.
-        preview = autoTarget && !player.IsDead ? PickTarget() : null;
+        preview = autoTarget && !PlayerController.Instance.IsDead ? PickTarget() : null;
     }
 
     private void LateUpdate() => UpdateMarker(preview); // sau khi enemy đã di chuyển trong frame
@@ -70,11 +67,11 @@ public class PlayerAttack : MonoBehaviour
         lastAimTime = Time.time;
 
         if (CurrentTarget != null)
-            player.SetFacing(IsoDirection.FromVector(ScreenDelta(CurrentTarget.position)));
+            PlayerController.Instance.SetFacing(IsoDirection.FromVector(ScreenDelta(CurrentTarget.position)));
         else
-            player.UpdateFacingFromInput(); // như cũ: hướng đang bấm, đứng yên thì hướng đang nhìn
+            PlayerController.Instance.UpdateFacingFromInput(); // như cũ: hướng đang bấm, đứng yên thì hướng đang nhìn
 
-        return IsoDirection.ToVector(player.Facing);
+        return IsoDirection.ToVector(PlayerController.Instance.Facing);
     }
 
     // Đòn có được lướt tới không: đã sát mục tiêu thì đứng lại đánh
@@ -83,7 +80,7 @@ public class PlayerAttack : MonoBehaviour
 
     private Transform PickTarget()
     {
-        Vector2 origin = player.Rb.position;
+        Vector2 origin = PlayerController.Instance.Rb.position;
 
         // 1. Giữ mục tiêu đang khoá nếu còn hợp lệ (combo không bị nhảy mục tiêu)
         if (CurrentTarget != null && Time.time - lastAimTime <= lockMemory &&
@@ -134,8 +131,8 @@ public class PlayerAttack : MonoBehaviour
     // Chênh lệch vị trí đổi sang "hướng màn hình": ngược lại với IsoDirection.ToIso
     private Vector2 ScreenDelta(Vector2 worldPos)
     {
-        Vector2 d = worldPos - player.Rb.position;
-        return new Vector2(d.x, d.y / player.IsoYScale);
+        Vector2 d = worldPos - PlayerController.Instance.Rb.position;
+        return new Vector2(d.x, d.y / PlayerController.Instance.IsoYScale);
     }
 
     private void UpdateMarker(Transform target)
@@ -154,7 +151,7 @@ public class PlayerAttack : MonoBehaviour
             if (spriteWidth > 0.0001f)
             {
                 float s = markerWidth / spriteWidth;
-                targetMarker.localScale = new Vector3(s, s * player.IsoYScale, 1f); // ép dẹt cho nằm trên sàn
+                targetMarker.localScale = new Vector3(s, s * PlayerController.Instance.IsoYScale, 1f); // ép dẹt cho nằm trên sàn
             }
         }
     }

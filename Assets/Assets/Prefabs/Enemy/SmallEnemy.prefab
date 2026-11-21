@@ -277,7 +277,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 50
-  MaxHP: 50
   HurtColor: {r: 1, g: 0.5424528, b: 0.5424528, a: 1}
   HitEffect: {fileID: 8039240782379786856, guid: 6a31a9fc533fe3f4096ce870efc57859, type: 3}
 --- !u!114 &1673893857888854218
@@ -292,7 +291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a82e5ba8ca566a44cb7343cfcd54c1d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
   stopDistance: 0.6
   stopInterval: 1
   repathInterval: 0.25
@@ -312,11 +310,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8b7975634d63ca46811fa210c3fe9a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData: {fileID: 11400000, guid: 9ed5d746d6c27d5439bc21d2910557d6, type: 2}
   attackHitMask:
     serializedVersion: 2
     m_Bits: 64
   canRespawn: 1
-  respawnCooldown: 5
+  respawnCooldown: 30
   homeSpawner: {fileID: 0}
 --- !u!114 &7107509657530066126
 MonoBehaviour:

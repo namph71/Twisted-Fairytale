@@ -4,26 +4,21 @@ using UnityEngine;
 public class PlayerWeapon : MonoBehaviour
 {
     public PlayerWeaponData[] WeaponEquipped;
-    public PlayerWeaponData CurrentWeaponEquipped { get; private set; }
-    public PlayerController player { get; private set; }
+    [field: SerializeField] public PlayerWeaponInformation CurrentWeaponEquipped { get; private set; }
     private float ultimateReadyTime = -1f;
 
     // Phát sự kiện cho cooldownbar
     public Action<float, AttackType> PerformAttack;
-    private void Awake()
-    {
-        player = GetComponent<PlayerController>();
-    }
     private void Start()
     {
         DoChangeWeapon(0);
     }
     public void ChangeWeapon(PlayerWeaponData weaponData)
     {
-        player.normalAttack = weaponData.NormalAttack;
-        player.heavyAttack = weaponData.HeavyAttack;
-        player.ultimateAttack = weaponData.Ultimate;
-        CurrentWeaponEquipped = weaponData;
+        PlayerController.Instance.normalAttack = weaponData.NormalAttack;
+        PlayerController.Instance.heavyAttack = weaponData.HeavyAttack;
+        PlayerController.Instance.ultimateAttack = weaponData.Ultimate;
+        CurrentWeaponEquipped.weaponData = weaponData;
     }
     public void DoChangeWeapon(int index)
     {
@@ -32,15 +27,15 @@ public class PlayerWeapon : MonoBehaviour
     }
     public void PerformUltimate()
     {
-        if (Time.time < ultimateReadyTime || player.ultimateAttack == null) return;
+        if (Time.time < ultimateReadyTime || PlayerController.Instance.ultimateAttack == null || CurrentWeaponEquipped.Level < 10) return;
 
         // Chỉ tung ultimate khi đang đứng hoặc chạy: không cắt ngang dash, dodge, lúc chết...
-        var cur = player.Machine.Current;
-        if (cur != player.IdleState && cur != player.RunState) return;
+        var cur = PlayerController.Instance.Machine.Current;
+        if (cur != PlayerController.Instance.IdleState && cur != PlayerController.Instance.RunState) return;
 
-        ultimateReadyTime = Time.time + CurrentWeaponEquipped.UltimateCooldown;
-        player.AttackState.SetAttack(player.ultimateAttack, ultimate: true);
-        player.Machine.ChangeState(player.AttackState);
-        PerformAttack?.Invoke(CurrentWeaponEquipped.UltimateCooldown, AttackType.Ultimate);
+        ultimateReadyTime = Time.time + CurrentWeaponEquipped.weaponData.UltimateCooldown;
+        PlayerController.Instance.AttackState.SetAttack(PlayerController.Instance.ultimateAttack, ultimate: true);
+        PlayerController.Instance.Machine.ChangeState(PlayerController.Instance.AttackState);
+        PerformAttack?.Invoke(CurrentWeaponEquipped.weaponData.UltimateCooldown, AttackType.Ultimate);
     }
 }

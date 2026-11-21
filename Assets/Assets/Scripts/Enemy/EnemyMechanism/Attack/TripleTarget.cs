@@ -15,8 +15,11 @@ public class TripleTarget : BaseBossAbility
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    HitDealer attackSpawned = Object.Instantiate(Prefab, enemy.TargetPlayer.AttackHitboxCenter, Prefab.transform.rotation);
-                    attackSpawned.Init(enemy.gameObject, Prefab.damage, enemy.attackHitMask, 1f);
+                    if (enemy.TargetPlayer != null)
+                    {
+                        HitDealer attackSpawned = Object.Instantiate(Prefab, enemy.TargetPlayer.AttackHitboxCenter, Prefab.transform.rotation);
+                        attackSpawned.Init(enemy.gameObject, Prefab.damage, enemy.attackHitMask, 1f);
+                    }
                     yield return new WaitForSeconds(TargetInterval);
                 }
                 yield return new WaitForSeconds(Cooldown);

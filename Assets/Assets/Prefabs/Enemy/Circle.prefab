@@ -354,6 +354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8b7975634d63ca46811fa210c3fe9a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData: {fileID: 11400000, guid: e03d53ec559aa2841996d4b02e1c06a2, type: 2}
   attackHitMask:
     serializedVersion: 2
     m_Bits: 64
@@ -373,7 +374,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 30
-  MaxHP: 30
   HurtColor: {r: 1, g: 0.7137255, b: 0.7137255, a: 1}
   HitEffect: {fileID: 8039240782379786856, guid: 6a31a9fc533fe3f4096ce870efc57859, type: 3}
 --- !u!114 &829042943637077924
