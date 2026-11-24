@@ -52,10 +52,12 @@ public class PlayerInputReader : MonoBehaviour
             if (PlayerController.Instance.currentStateName == "PlayerRunState")
             {
                 if (!PlayerController.Instance.PlayerStamina.IsTired(10)) dashTime = Time.time;
+                SoundManager.Instance.PlaySFX("dash");
             }
             else
             {
                 if (!PlayerController.Instance.PlayerStamina.IsTired(10)) dodgeTime = Time.time;
+                SoundManager.Instance.PlaySFX("dodge");
             }
             playerWeapon.PerformAttack?.Invoke(PlayerController.Instance.dashDuration, AttackType.Dash);
         }

@@ -38,4 +38,9 @@ public class PlayerAttackData : ScriptableObject
     }
     // Sửa mảng trên Inspector (kể cả lúc đang Play) thì bỏ bản cũ để lần sau dựng lại
     private void OnValidate() => lookup = null;
+    [Header("Âm thanh")]
+    [Tooltip("Phát lúc bắt đầu vung (vd: tiếng biến hình của heavy). Để trống nếu không cần")]
+    public string SwingSfx;
+    [Tooltip("Phát đúng lúc hitbox bật")]
+    public string HitSfx;
 }

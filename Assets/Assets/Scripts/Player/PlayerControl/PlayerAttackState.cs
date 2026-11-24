@@ -32,15 +32,12 @@ public class PlayerAttackState : PlayerState
 
     private void BeginSwing()
     {
-        base.Enter(); // reset StateTime
-
-        // Có enemy trong tầm: quay về phía nó (làm tròn 8 hướng). Không có: đánh theo hướng đang bấm,
-        // đứng yên thì theo hướng đang nhìn. Mỗi nhát combo chọn lại nên vẫn đổi hướng được giữa combo.
+        base.Enter();
         dir = player.Attack.AimForAttack();
-
         hasSpawnedAttack = false;
         player.PlayAnimation(current.AnimName, restart: true);
         player.currentStateName = "Attack";
+        PlaySfx(current.SwingSfx);              // lúc bắt đầu vung
     }
 
     public override void LogicUpdate()
@@ -50,9 +47,11 @@ public class PlayerAttackState : PlayerState
         if (!hasSpawnedAttack && StateTime >= current.HitStart)
         {
             hasSpawnedAttack = true;
+            PlaySfx(current.HitSfx);            // đúng lúc hitbox bật
             if (isUltimate) SpawnUltimate();
             else SpawnNormal();
         }
+
         if (StateTime < current.Duration) return; // đòn chưa xong: bỏ qua mọi input
 
         if (player.TryEvade()) return;
@@ -110,5 +109,9 @@ public class PlayerAttackState : PlayerState
     public override void Exit()
     {
         if (attackSpawned != null) Object.Destroy(attackSpawned.gameObject);
+    }
+    private static void PlaySfx(string id)
+    {
+        if (!string.IsNullOrEmpty(id)) SoundManager.Instance?.PlaySFX(id);
     }
 }

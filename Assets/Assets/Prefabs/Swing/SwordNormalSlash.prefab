@@ -9899,6 +9899,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <damage>k__BackingField: 3
+  SFX_Hit_ID: sword_normal_hit
 --- !u!1 &3313326048701342161
 GameObject:
   m_ObjectHideFlags: 0

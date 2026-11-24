@@ -24,15 +24,18 @@ public class PlayerInformation : MonoBehaviour
 
     private void Start()
     {
-        // Mặc định: đủ bình theo PlayerData. Nếu có save, SaveManager.ApplyToPlayer sẽ ghi đè sau
-        RegainPotions();
+        UserData data = SaveManager.Instance?.Data;
+        if (data != null && data.HasPlayerState)
+            SetPotions(data.CurrentHealthPotion, data.CurrentStaminaPotion); // có save: dùng số đã lưu
+        else
+            RegainPotions();                                                // chưa có save: đầy bình
     }
-
     /// <summary>Đặt số bình về giá trị cụ thể (load save, mặc định) và cập nhật UI.</summary>
     public void SetPotions(int health, int stamina)
     {
         HealthPotionAmount = Mathf.Clamp(health, 0, playerData.MaxHealthPotionAmount);
         StaminaPotionAmount = Mathf.Clamp(stamina, 0, playerData.MaxStaminaPotionAmount);
+        SyncToSave();
         RefreshUI();
     }
 
@@ -42,6 +45,7 @@ public class PlayerInformation : MonoBehaviour
     {
         if (!CanUseHealthPotion) return;
         HealthPotionAmount--;
+        SyncToSave();
         RefreshUI();
     }
 
@@ -49,7 +53,16 @@ public class PlayerInformation : MonoBehaviour
     {
         if (!CanUseStaminaPotion) return;
         StaminaPotionAmount--;
+        SyncToSave();
         RefreshUI();
+    }
+
+    // Cập nhật Data trong bộ nhớ ngay lập tức. Ổ đĩa được ghi ở lần WriteToPrefs/Save kế tiếp
+    private void SyncToSave()
+    {
+        if (SaveManager.Instance == null) return;
+        SaveManager.Instance.Data.CurrentHealthPotion = HealthPotionAmount;
+        SaveManager.Instance.Data.CurrentStaminaPotion = StaminaPotionAmount;
     }
 
     private void RefreshUI()

@@ -8,12 +8,15 @@ public enum AttackType { Normal, Heavy, Ultimate, Dash, Block }
 public class CooldownBar : MonoBehaviour
 {
     [SerializeField] private Image fillImage;
-    [SerializeField] private PlayerWeapon player;
+    private PlayerWeapon player;
     [SerializeField] private int UnlockLevel;
     [SerializeField] private AttackType ChosenType;
 
     private bool IsUnlocked => player.CurrentWeaponEquipped.Level >= UnlockLevel;
-
+    private void Awake()
+    {
+        player = PlayerController.Instance.GetComponent<PlayerWeapon>();
+    }
     private IEnumerator Start()
     {
         player.PerformAttack += OnCooldownChanged;
