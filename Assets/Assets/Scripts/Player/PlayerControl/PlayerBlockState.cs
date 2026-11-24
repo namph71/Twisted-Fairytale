@@ -32,8 +32,12 @@ public class PlayerBlockState : PlayerState
         }
 
         player.PlayerStamina.ConsumeStamina(player.blockHitCost);
-        if (player.blockHitVFX != null) // đỡ trúng chỉ sinh thêm VFX quanh player
+        if (player.blockHitVFX != null)
+        {
+            // đỡ trúng chỉ sinh thêm VFX quanh player
             Object.Destroy(Object.Instantiate(player.blockHitVFX, player.transform.position, Quaternion.identity), 1f);
+            SoundManager.Instance.PlaySFX("sword_block");
+        }
         return true;
     }
 

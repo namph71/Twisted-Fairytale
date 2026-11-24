@@ -12,6 +12,11 @@ public class PlayerController : MonoBehaviour, IRespawnable
     // General stats
     [Header("Movement")]
     public float runSpeed = 4f;
+    [Header("Footstep")]
+    [Tooltip("Khoảng cách giữa 2 tiếng bước chân khi chạy (giây)")]
+    public float footstepInterval = 0.3f;
+    [Tooltip("Thời gian từ lúc bắt đầu chạy đến tiếng bước đầu tiên")]
+    public float firstStepDelay = 0.1f;
     // Dash / Dodge
     [Header("Dash (C khi đang Run)")]
     public float dashSpeed = 9f;

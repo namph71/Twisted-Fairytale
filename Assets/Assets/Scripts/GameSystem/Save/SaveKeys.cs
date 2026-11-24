@@ -3,4 +3,7 @@ public static class SaveKeys
 {
     public static string UserData = "UserData";
     public static string SaveVersion = "SaveVersion";
+    public static string MasterVolume = "MasterVolume";
+    public static string MusicVolume = "MusicVolume";
+    public static string SfxVolume = "SfxVolume";
 }

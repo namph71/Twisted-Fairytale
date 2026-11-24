@@ -37,3 +37,5 @@ MonoBehaviour:
     rotation: {x: -180, y: 30, z: -90}
   - direction: 7
     rotation: {x: 30, y: 135, z: 90}
+  SwingSfx: 
+  HitSfx: sword_normal_attack

@@ -21,3 +21,5 @@ MonoBehaviour:
   SpawnForward: 4
   Prefab: {fileID: 7523429129607922096, guid: 403b8e5df9c298a46b7fdb0a18ed2ef9, type: 3}
   PrefabDirections: []
+  SwingSfx: 
+  HitSfx: sword_ultimate_attack

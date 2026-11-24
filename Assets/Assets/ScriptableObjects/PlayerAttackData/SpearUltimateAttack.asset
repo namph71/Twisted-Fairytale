@@ -18,4 +18,8 @@ MonoBehaviour:
   HitEnd: 0.22
   LungeSpeed: 1.5
   Damage: 10
+  SpawnForward: 0
   Prefab: {fileID: 7523429129607922096, guid: 403b8e5df9c298a46b7fdb0a18ed2ef9, type: 3}
+  PrefabDirections: []
+  SwingSfx: 
+  HitSfx: 

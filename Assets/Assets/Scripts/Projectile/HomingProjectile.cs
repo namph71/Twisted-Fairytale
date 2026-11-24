@@ -5,6 +5,7 @@ public class HomingProjectile : MonoBehaviour
     private GameObject Source;
     private IDamageable Target;
     [SerializeField] private float Damage;
+    [SerializeField] private GameObject ExplodeEffect;
 
     [Header("Bay")]
     [SerializeField] private float Speed = 5f;
@@ -74,6 +75,13 @@ public class HomingProjectile : MonoBehaviour
         {
             hasHit = true; // Destroy chờ tới cuối frame: chặn lần chạm thứ 2 (khiên + thân cùng lúc)
             Target.TakeDamage(Damage, Source);
+            // Effect
+            if (ExplodeEffect != null)
+            {
+                GameObject explode = Instantiate(ExplodeEffect, transform.position, Quaternion.identity);
+                explode.transform.localScale = this.transform.localScale;
+                Destroy(explode, 1f);
+            }
             Destroy(gameObject);
         }
     }

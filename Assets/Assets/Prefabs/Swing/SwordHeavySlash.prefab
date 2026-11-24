@@ -157,6 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <damage>k__BackingField: 9
+  SFX_Hit_ID: sword_heavy_hit
 --- !u!1001 &5755473151959699498
 PrefabInstance:
   m_ObjectHideFlags: 0

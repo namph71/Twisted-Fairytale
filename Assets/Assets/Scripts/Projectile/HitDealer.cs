@@ -8,6 +8,7 @@ public class HitDealer : MonoBehaviour
     protected LayerMask hitMask;
     private HashSet<IDamageable> alreadyHit = new();
     private readonly HashSet<IDamageable> ignored = new();
+    [SerializeField] private string SFX_Hit_ID;
     // Bật lại (SetActive true) = một lượt đánh mới: quên ai đã trúng, ai đã né ở lượt trước
     protected virtual void OnEnable()
     {
@@ -65,6 +66,7 @@ public class HitDealer : MonoBehaviour
         var target = GetTarget(col);
         if (target == null || !alreadyHit.Add(target)) return false;
         OnHit(target);
+        SoundManager.Instance.PlaySFX(SFX_Hit_ID);
         return true;
     }
     // Đòn ở layer Dodgeable (AOE) chỉ né được, không đỡ được
